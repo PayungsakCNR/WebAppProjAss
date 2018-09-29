@@ -16,7 +16,7 @@ module.exports = function (passport) {
         });
     });
 
-    //สมัครสมาชิก
+    //Register
     passport.use('local-signup', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
@@ -42,7 +42,7 @@ module.exports = function (passport) {
             });
 
         }));
-    //เข้าสู่ระบบ    
+    //Login    
     passport.use('local-login', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
@@ -52,13 +52,13 @@ module.exports = function (passport) {
             User.findOne({ 'local.email': email }, function (err, user) {
                 if (err)
                     return done(err);
-                //ไม่พบ user ในระบบ
+                //If no user found
                 if (!user)
                     return done(null, false, req.flash('loginMessage', 'No user found.'));
-                //รหัสผ่านไม่ถูกต้อง
+                //If password incorrect
                 if (!user.validPassword(password))
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-                //เข้่าสู่ระบบสำเร็จ
+                //Login Sucessfully
                 return done(null, user);
                 
             });
